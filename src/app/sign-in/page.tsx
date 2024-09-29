@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth } from "@/firebase/config";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const SignIn = () => {
 	// -------------------------------
@@ -13,10 +15,21 @@ const SignIn = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
+	const router = useRouter();
+
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		// Handle sign-in logic here, like calling a sign-in API
-		console.log("Email:", email, "Password:", password);
+		try {
+			const res = await signInWithEmailAndPassword(email, password);
+			if (res) alert("Logged In");
+			console.log({ res });
+			setEmail("");
+			setPassword("");
+
+			router.push("/");
+		} catch (error) {
+			console.log(error.message);
+		}
 	};
 
 	return (
@@ -60,6 +73,9 @@ const SignIn = () => {
 					>
 						Sign In
 					</button>
+					<p>
+						Don't have an account? <Link href={"/sign-up"}>Register</Link>{" "}
+					</p>
 				</form>
 			</div>
 		</div>

@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth } from "@/firebase/config";
+import Link from "next/link";
 
 const SignUp = () => {
 	// -------------------------------
@@ -18,11 +19,12 @@ const SignUp = () => {
 		e.preventDefault();
 		try {
 			const res = await createUserWithEmailAndPassword(email, password);
+			if (res) alert("User created Successfully");
 			console.log({ res });
 			setEmail("");
 			setPassword("");
 		} catch (error) {
-			console.error(error);
+			console.log(error.message);
 		}
 	};
 
@@ -69,6 +71,9 @@ const SignUp = () => {
 					>
 						Sign Up
 					</button>
+					<p>
+						Already have an account? <Link href={"/sign-in"}>Log In</Link>{" "}
+					</p>
 				</form>
 			</div>
 		</div>
